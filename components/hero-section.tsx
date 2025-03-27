@@ -17,8 +17,8 @@ export function HeroSection() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2" asChild>
-              <Link href="/pricing">
-                Request a Demo
+              <Link href="/contact">
+                Get Started
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
