@@ -1,41 +1,54 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 
 export function AnimatedLogo() {
   const iaRef = useRef<HTMLSpanElement>(null)
+  const [displayText, setDisplayText] = useState("IA")
+  const [isFlipping, setIsFlipping] = useState(false)
 
   useEffect(() => {
-    const iaElement = iaRef.current
-    if (!iaElement) return
-
-    // Animation for the "IA" part
     const animateIA = () => {
-      // Glitch effect animation
-      iaElement.classList.add("animate-glitch")
-
+      // Start flip animation after 5 seconds
       setTimeout(() => {
-        iaElement.classList.remove("animate-glitch")
+        // Start flip animation
+        setIsFlipping(true)
 
-        // Wait before starting the next animation cycle
-        setTimeout(animateIA, 5000)
-      }, 1000)
+        // Change text to "AI" halfway through the flip
+        setTimeout(() => {
+          setDisplayText("AI")
+
+          // Hold "AI" for 4 seconds before flipping back
+          setTimeout(() => {
+            // Flip back to "IA"
+            setIsFlipping(true)
+
+            // Change text back to "IA" halfway through the flip back
+            setTimeout(() => {
+              setDisplayText("IA")
+              setIsFlipping(false)
+
+              // Wait 5 seconds before starting the next animation cycle
+              setTimeout(animateIA, 5000)
+            }, 150)
+          }, 4000) // Hold "AI" for 4 seconds
+        }, 150)
+      }, 5000) // Wait 5 seconds before starting animation
     }
 
+    // Start the animation cycle
     animateIA()
 
-    return () => {
-      iaElement.classList.remove("animate-glitch")
-    }
+    // No cleanup needed since we removed the glitch animation
   }, [])
 
   return (
     <Link href="/" className="flex items-center">
       <div className="relative h-10 flex items-center">
         <span className="text-blue-600 font-bold text-2xl">TechFin</span>
-        <span ref={iaRef} className="text-red-600 font-bold text-2xl relative">
-          IA
+        <span ref={iaRef} className={`text-red-600 font-bold text-2xl relative ${isFlipping ? "animate-flip" : ""}`}>
+          {displayText}
         </span>
       </div>
     </Link>
